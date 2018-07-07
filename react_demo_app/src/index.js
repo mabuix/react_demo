@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 // import JsonTest from './display_json_test.js';
+import ChangeStateOnlyReact from './change_state_only_react.js';
 
 // Appコンポーネント作成
 class App extends React.Component {
@@ -56,8 +57,9 @@ class App extends React.Component {
 ReactDOM.render(
     // Appコンポーネントをレンダリング
     <div>
-        <App />
+        {/* <App /> */}
         {/* <JsonTest /> */}
+        <ChangeStateOnlyReact />
     </div>,
     document.getElementById('root')
 )
