@@ -2,19 +2,43 @@ import fetch from 'isomorphic-fetch';
 import React from 'react';
 import './index.css';
 
-// TODO 表の各項目(コイン名、値段、時価総額、出来高)でソートできるボタンつける。
 // TODO 表示金額をUSD、JPY、BTCに変換するボタン(余裕あれば)。
 
 // コンポーネント作成
 class ChangeStateOnlyReact extends React.Component {
 
+    convertJsx(list) {
+        // JSXに変換
+        return list.map((coin) =>
+            <li>{coin.rank}：{coin.name}, [price_usd: {coin.price_usd}], [market_cap_usd: {coin.market_cap_usd}], [percent_change_24h: {coin.percent_change_24h}]</li>
+        )
+    }
+
     sortName() {
-        console.log("name");
-        console.log(this.state.list);
-        // TODO 名前でソート
-        // this.state.listをソートしてjsxListを作り直す
-        // jsxListの先頭行はheaderなので再利用する
-        this.setState({ jsxList: [<li>dummy!</li>] });
+        this.sortCondition(this.state.list, 'name');
+    };
+
+    sortPrice() {
+        this.sortCondition(this.state.list, 'price');
+    };
+
+    sortMarketCap() {
+        this.sortCondition(this.state.list, 'market_cap');
+    };
+
+    sortPercentChange24h() {
+        this.sortCondition(this.state.list, 'percent_change_24h');
+    };
+
+    sortCondition(list, condition) {
+        // ソート
+        list.sort((a, b) => {
+            return a[condition] < b[condition] ? -1 : 1;
+        });
+        let jsxList = this.convertJsx(list);
+        // ヘッダーの再利用
+        jsxList.unshift(this.state.jsxList[0])
+        this.setState({ jsxList: jsxList });
     };
 
     renderCoins() {
@@ -49,13 +73,13 @@ class ChangeStateOnlyReact extends React.Component {
                 for (let rank in dict) {
                     list.push(dict[rank]);
                 }
-                // JSXに変換
-                let jsxList = list.map((coin) => 
-                    <li>{coin.rank}：{coin.name}, [price_usd: {coin.price_usd}], [market_cap_usd: {coin.market_cap_usd}], [percent_change_24h: {coin.percent_change_24h}]</li>
-                )
+                let jsxList = this.convertJsx(list);
                 const name = <button onClick={() => this.sortName()}>name</button>
-                // TODO ヘッダーを追加
-                jsxList.unshift(<li>#：{name}, price, market_cap, percent_change_24h</li>)
+                const price = <button onClick={() => this.sortPrice()}>price</button>
+                const marketCap = <button onClick={() => this.sortMarketCap()}>market_cap</button>
+                const percentChange24h = <button onClick={() => this.sortPercentChange24h()}>percent_change_24h</button>
+                // ヘッダーを追加
+                jsxList.unshift(<li>#：{name}, {price}, {marketCap}, {percentChange24h}</li>)
                 // stateが更新されたら、render()が自動的に実行される。
                 this.setState({ 
                     list: list,
