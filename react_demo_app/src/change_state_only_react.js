@@ -8,8 +8,12 @@ const DISPLAY_USD = "USD";
 // コンポーネント作成
 class ChangeStateOnlyReact extends React.Component {
 
+    checkDisplay(display) {
+        return typeof display === 'undefined' ? this.state.display : display;
+    }
+
     convertJsx(list, display) {
-        display = typeof display === 'undefined' ? this.state.display : display
+        display = this.checkDisplay(display);
         // JSXに変換
         return list.map((coin) =>
             <li>{coin.rank}：{coin.name}, [price: {display === DISPLAY_JPY ? coin.price_jpy : coin.price_usd}], [market_cap: {display === DISPLAY_JPY ? coin.market_cap_jpy : coin.market_cap_usd}], [percent_change_24h: {coin.percent_change_24h}]</li>
@@ -58,7 +62,7 @@ class ChangeStateOnlyReact extends React.Component {
         const price = <button onClick={() => this.sortPrice()}>price</button>
         const marketCap = <button onClick={() => this.sortMarketCap()}>market_cap</button>
         const percentChange24h = <button onClick={() => this.sortPercentChange24h()}>percent_change_24h</button>
-        const display_btn = <button onClick={() => this.changeDisplay()}>{typeof display === 'undefined' ? DISPLAY_JPY : display}</button>
+        const display_btn = <button onClick={() => this.changeDisplay()}>{this.checkDisplay(display)}</button>
         return <li>#：{name}, {price}, {marketCap}, {percentChange24h}, {display_btn}</li>
     }
 
