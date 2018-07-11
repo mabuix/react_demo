@@ -2,15 +2,17 @@ import fetch from 'isomorphic-fetch';
 import React from 'react';
 import './index.css';
 
-// TODO 表示金額をUSD、JPY、BTCに変換するボタン(余裕あれば)。
+const DISPLAY_JPY = "JPY";
+const DISPLAY_USD = "USD";
 
 // コンポーネント作成
 class ChangeStateOnlyReact extends React.Component {
 
-    convertJsx(list) {
+    convertJsx(list, display) {
+        display = typeof display === 'undefined' ? this.state.display : display
         // JSXに変換
         return list.map((coin) =>
-            <li>{coin.rank}：{coin.name}, [price_usd: {coin.price_usd}], [market_cap_usd: {coin.market_cap_usd}], [percent_change_24h: {coin.percent_change_24h}]</li>
+            <li>{coin.rank}：{coin.name}, [price: {display === DISPLAY_JPY ? coin.price_jpy : coin.price_usd}], [market_cap: {display === DISPLAY_JPY ? coin.market_cap_jpy : coin.market_cap_usd}], [percent_change_24h: {coin.percent_change_24h}]</li>
         )
     }
 
@@ -36,14 +38,33 @@ class ChangeStateOnlyReact extends React.Component {
             return a[condition] < b[condition] ? -1 : 1;
         });
         let jsxList = this.convertJsx(list);
-        // ヘッダーの再利用
-        jsxList.unshift(this.state.jsxList[0])
+        jsxList.unshift(this.createHeader())
         this.setState({ jsxList: jsxList });
     };
 
+    changeDisplay() {
+        // stateのdisplayをUSD ⇔ JPYに変換して、ヘッダー、金額の表示も更新
+        const display = this.state.display === DISPLAY_JPY ? DISPLAY_USD : DISPLAY_JPY
+        const jsxList = this.convertJsx(this.state.list, display);
+        jsxList.unshift(this.createHeader(display))
+        this.setState({ 
+            display: display,
+            jsxList: jsxList 
+        });
+    }
+
+    createHeader(display) {
+        const name = <button onClick={() => this.sortName()}>name</button>
+        const price = <button onClick={() => this.sortPrice()}>price</button>
+        const marketCap = <button onClick={() => this.sortMarketCap()}>market_cap</button>
+        const percentChange24h = <button onClick={() => this.sortPercentChange24h()}>percent_change_24h</button>
+        const display_btn = <button onClick={() => this.changeDisplay()}>{typeof display === 'undefined' ? DISPLAY_JPY : display}</button>
+        return <li>#：{name}, {price}, {marketCap}, {percentChange24h}, {display_btn}</li>
+    }
+
     renderCoins() {
         // coinmarketcapから上位10位の銘柄取得api
-        let endpoint = "https://api.coinmarketcap.com/v2/ticker/?limit=10&sort=rank"
+        let endpoint = "https://api.coinmarketcap.com/v2/ticker/?convert=JPY&limit=10&sort=rank"
         // fetchでリクエストを投げる。非同期処理でPromiseのオブジェクトが返却される。
         let dict = {};
         fetch(endpoint).then((response) => {
@@ -52,14 +73,17 @@ class ChangeStateOnlyReact extends React.Component {
                 let data = value.data;
                 for (let key in data) {
                     let coin = data[key];
+                    let quotes_jpy = coin['quotes']['JPY'];
                     let quotes_usd = coin['quotes']['USD'];
                     // レスポンスを連想配列に詰める。
                     dict[coin.rank] = {
                         rank: coin['rank'],
                         name: coin['name'],
+                        price_jpy: quotes_jpy['price'],
+                        market_cap_jpy: quotes_jpy['market_cap'],
                         price_usd: quotes_usd['price'],
                         market_cap_usd: quotes_usd['market_cap'],
-                        percent_change_24h: quotes_usd['percent_change_24h']
+                        percent_change_24h: quotes_usd['percent_change_24h'],
                     }
                 }
             })
@@ -74,14 +98,10 @@ class ChangeStateOnlyReact extends React.Component {
                     list.push(dict[rank]);
                 }
                 let jsxList = this.convertJsx(list);
-                const name = <button onClick={() => this.sortName()}>name</button>
-                const price = <button onClick={() => this.sortPrice()}>price</button>
-                const marketCap = <button onClick={() => this.sortMarketCap()}>market_cap</button>
-                const percentChange24h = <button onClick={() => this.sortPercentChange24h()}>percent_change_24h</button>
                 // ヘッダーを追加
-                jsxList.unshift(<li>#：{name}, {price}, {marketCap}, {percentChange24h}</li>)
+                jsxList.unshift(this.createHeader());
                 // stateが更新されたら、render()が自動的に実行される。
-                this.setState({ 
+                this.setState({
                     list: list,
                     jsxList: jsxList 
                 });
@@ -94,6 +114,7 @@ class ChangeStateOnlyReact extends React.Component {
         // Promiseは結果をそのまま返せないので、stateを用意して結果を格納しておく
         this.renderCoins();
         this.state = {
+            display: DISPLAY_JPY,
             list: []
         }
     }
