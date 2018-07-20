@@ -1,7 +1,9 @@
 import fetch from 'isomorphic-fetch';
+import ActionType from './action_type';
+import Constants from '../constants';
 
-const DISPLAY_JPY = "JPY";
-const DISPLAY_USD = "USD";
+// const DISPLAY_JPY = "JPY";
+// const DISPLAY_USD = "USD";
 
 const Actions = {
 
@@ -11,18 +13,24 @@ const Actions = {
     // dispatchでstateを更新する。
     // なのでactionsでのreturnは要素まで。
 
+    /*
     checkDisplay(display) {
         return typeof display === 'undefined' ? this.state.display : display;
     },
+    */
 
+    /*
     convertJsx(list, display) {
         display = this.checkDisplay(display);
         // TODO JSXはactionsで使えないので、componentsに移行する。
+        // state.jsxListは廃止、state.listのみ返すようにする。
+
         // JSXに変換
         return list.map((coin) =>
             <li>{coin.rank}：{coin.name}, [price: {display === DISPLAY_JPY ? coin.price_jpy : coin.price_usd}], [market_cap: {display === DISPLAY_JPY ? coin.market_cap_jpy : coin.market_cap_usd}], [percent_change_24h: {coin.percent_change_24h}]</li>
         )
     },
+    */
 
     sortName() {
         this.sortCondition(this.state.list, 'name');
@@ -45,22 +53,35 @@ const Actions = {
         list.sort((a, b) => {
             return a[condition] < b[condition] ? -1 : 1;
         });
-        let jsxList = this.convertJsx(list);
-        jsxList.unshift(this.createHeader())
-        this.setState({ jsxList: jsxList });
+        //let jsxList = this.convertJsx(list);
+        //jsxList.unshift(this.createHeader())
+        //this.setState({ jsxList: jsxList });
+
+        // TODO setState禁止
+        return {
+            type: ActionType.SORT_CONDITION,
+            list: list,
+        }
     },
 
     changeDisplay() {
         // stateのdisplayをUSD ⇔ JPYに変換して、ヘッダー、金額の表示も更新
-        const display = this.state.display === DISPLAY_JPY ? DISPLAY_USD : DISPLAY_JPY
-        const jsxList = this.convertJsx(this.state.list, display);
-        jsxList.unshift(this.createHeader(display))
-        this.setState({
+        const display = this.state.display === Constants.DISPLAY_JPY ? Constants.DISPLAY_USD : Constants.DISPLAY_JPY
+        //const jsxList = this.convertJsx(this.state.list, display);
+        //jsxList.unshift(this.createHeader(display))
+        //this.setState({
+        //    display: display,
+        //    jsxList: jsxList
+        //});
+
+        // TODO setState禁止
+        return {
+            type: ActionType.CHANGE_DISPLAY,
             display: display,
-            jsxList: jsxList
-        });
+        }
     },
 
+    /*
     createHeader(display) {
         const name = <button onClick={() => this.sortName()}>name</button>
         const price = <button onClick={() => this.sortPrice()}>price</button>
@@ -69,6 +90,7 @@ const Actions = {
         const display_btn = <button onClick={() => this.changeDisplay()}>{this.checkDisplay(display)}</button>
         return <li>#：{name}, {price}, {marketCap}, {percentChange24h}, {display_btn}</li>
     },
+    */
 
     setCoins() {
         // coinmarketcapから上位10位の銘柄取得api
@@ -105,9 +127,9 @@ const Actions = {
                 for (let rank in dict) {
                     list.push(dict[rank]);
                 }
-                let jsxList = this.convertJsx(list);
+                //let jsxList = this.convertJsx(list);
                 // ヘッダーを追加
-                jsxList.unshift(this.createHeader());
+                //jsxList.unshift(this.createHeader());
                 /*
                 // stateが更新されたら、render()が自動的に実行される。
                 this.setState({
@@ -116,9 +138,9 @@ const Actions = {
                 });
                 */
                 return {
-                    type: 'SET_COINS',
+                    type: ActionType.SET_COINS,
                     list: list,
-                    jsxList: jsxList
+                    //jsxList: jsxList
                 }
             }, 100)
         })

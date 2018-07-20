@@ -1,3 +1,4 @@
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
 
 import ReduxTest from './../components/redux_test.js'
@@ -8,10 +9,14 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
+    //console.log('mapDispatchToProps');
+    //console.log(ReduxTestActions);
+    //console.log(dispatch);
     return {
-        setCoins() {
-            dispatch(ReduxTestActions.setCoins());
-        }
+        //setCoins() {
+        //    dispatch(ReduxTestActions.setCoins());
+        //},
+        ...bindActionCreators(ReduxTestActions, dispatch)
     }
 }
 

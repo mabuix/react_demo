@@ -1,4 +1,3 @@
-import fetch from 'isomorphic-fetch';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
@@ -25,3 +24,12 @@ ReactDOM.render(
     </Provider>,
     document.getElementById('root')
 )
+
+// ブログ用にやった事メモ
+// redux, react-redux導入
+// container, component, reducer, actionの作成
+// ヘッダーをapiのレスポンスを格納したリストに混ぜるのをやめて、独立したコンポーネントに変更。
+// ビジネスロジックを移動。JSXを作成するものはcomponentsに、それ以外はactionに。
+// containerでbindActionCreatorsを使用してactionsにあるビジネスロジックをまとめてpropsから取得できるようにした。
+// setState()の廃止。全てpropsから取得できるようにした。
+// 非同期処理するためにredux-trunk導入
