@@ -7,24 +7,27 @@ const initialState = {
 }
 
 function reducer(state = initialState, action) {
-
     switch (action.type) {
         case ActionType.SET_COINS: {
             return {
-                list: state.list,
-                jsxList: state.jsxList,
+                ...state,
+                list: action.list,
             }
         }
         case ActionType.SORT_CONDITION: {
             return {
-                list: state.list,
+                ...state,
+                list: action.list,
             }
         }
         case ActionType.CHANGE_DISPLAY: {
             return {
-                display: state.display,
+                ...state,
+                display: action.display,
             }
         }
+        default: // フォールバック処理
+            return state
     }
 }
 

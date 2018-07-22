@@ -9,13 +9,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-    //console.log('mapDispatchToProps');
-    //console.log(ReduxTestActions);
-    //console.log(dispatch);
     return {
-        //setCoins() {
-        //    dispatch(ReduxTestActions.setCoins());
-        //},
         ...bindActionCreators(ReduxTestActions, dispatch)
     }
 }
