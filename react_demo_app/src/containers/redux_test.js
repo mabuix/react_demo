@@ -10,6 +10,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        // ActionCreatorの関数をdispatchせずに実行できる
         ...bindActionCreators(ReduxTestActions, dispatch)
     }
 }
