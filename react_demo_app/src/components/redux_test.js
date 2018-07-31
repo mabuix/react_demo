@@ -1,5 +1,6 @@
 import React from 'react';
 import Constants from '../constants';
+import { Link } from "react-router-dom";
 
 // コンポーネント作成
 class ReduxTest extends React.Component {
@@ -9,7 +10,7 @@ class ReduxTest extends React.Component {
         if (typeof this.props.list !== 'undefined') {
             // JSXに変換
             return this.props.list.map((coin) =>
-                <li>{coin.rank}：{coin.name}, [price: {display === Constants.DISPLAY_JPY ? coin.price_jpy : coin.price_usd}], [market_cap: {display === Constants.DISPLAY_JPY ? coin.market_cap_jpy : coin.market_cap_usd}], [percent_change_24h: {coin.percent_change_24h}]</li>
+                <li>{coin.rank}：<Link to='/detail'>{coin.name}</Link>, [price: {display === Constants.DISPLAY_JPY ? coin.price_jpy : coin.price_usd}], [market_cap: {display === Constants.DISPLAY_JPY ? coin.market_cap_jpy : coin.market_cap_usd}], [percent_change_24h: {coin.percent_change_24h}]</li>
             )
         }
     }
