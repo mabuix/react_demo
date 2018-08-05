@@ -7,8 +7,12 @@ class Detail extends React.Component {
     render() {
         return (
             <div>
-                <h1>TODO コインの詳細ページ作成</h1>
                 <p><Link to="/">back</Link></p>
+                <div>
+                    <h2>選択したコイン情報</h2>
+                    <div id="plot"></div>
+                </div>
+                {this.props.plot(this.props.match.params.id)}
             </div>
         )
     }

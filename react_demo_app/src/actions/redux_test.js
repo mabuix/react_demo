@@ -87,6 +87,7 @@ const Actions = {
                             price_usd: quotes_usd['price'],
                             market_cap_usd: quotes_usd['market_cap'],
                             percent_change_24h: quotes_usd['percent_change_24h'],
+                            website_slug: coin['website_slug'],
                         }
                     }
                 })

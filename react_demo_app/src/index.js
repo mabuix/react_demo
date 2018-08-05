@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-import { createStore, applyMiddleware, combineReducers } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 
@@ -33,7 +33,7 @@ ReactDOM.render(
         <Router>
             <Fragment>
                 <Route exact path="/" component={ReduxTest} />
-                <Route path="/detail" component={Detail} />
+                <Route path="/detail/:id" component={Detail} />
             </Fragment>
         </Router>
     </Provider>,
