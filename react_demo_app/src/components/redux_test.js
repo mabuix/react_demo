@@ -1,7 +1,7 @@
 import React, {Fragment} from 'react';
-import ChangeCurrency from './change_currency.js';
+import TitleAppBar from './title_app_bar';
+import ChangeCurrency from './change_currency';
 import CurrencyTable from './currency_table';
-
 
 // コンポーネント作成
 class ReduxTest extends React.Component {
@@ -15,6 +15,7 @@ class ReduxTest extends React.Component {
         const { list, display, changeDisplay, handleRequestSort, order, orderBy } = this.props;
         return (
             <Fragment>
+                <TitleAppBar title='Top 10 Cryptocurrencies By Market Capitalization'/>
                 <ChangeCurrency display={display} changeDisplay={changeDisplay} />
                 <CurrencyTable list={list}
                                display={display}
