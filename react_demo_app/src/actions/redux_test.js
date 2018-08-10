@@ -53,12 +53,12 @@ const Actions = {
         }
     },
 
-    changeDisplay() {
+    changeDisplay(display) {
         // stateのdisplayをUSD ⇔ JPYに変換して、ヘッダー、金額の表示も更新
-        const display = this.display === Constants.DISPLAY_JPY ? Constants.DISPLAY_USD : Constants.DISPLAY_JPY
+        const changedDisplay = display === Constants.DISPLAY_JPY ? Constants.DISPLAY_USD : Constants.DISPLAY_JPY
         return {
             type: ActionType.CHANGE_DISPLAY,
-            display: display,
+            display: changedDisplay,
         }
     },
 

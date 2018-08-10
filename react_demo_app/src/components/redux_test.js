@@ -1,6 +1,9 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import Constants from '../constants';
 import { Link } from "react-router-dom";
+import ChangeCurrency from './change_currency.js';
+import CurrencyTable from './currency_table';
+
 
 // コンポーネント作成
 class ReduxTest extends React.Component {
@@ -30,11 +33,12 @@ class ReduxTest extends React.Component {
     }
 
     render() {
+        const { list, display, changeDisplay } = this.props;
         return (
-            <ul>
-                {this.createHeader()}
-                {this.convertJsx()}
-            </ul>
+            <Fragment>
+                <ChangeCurrency display={display} changeDisplay={changeDisplay} />
+                <CurrencyTable list={list} display={display} />
+            </Fragment>
         )
     }
 }

@@ -1,7 +1,7 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
 
-import ReduxTest from './../components/redux_test.js'
+import ReduxTest from '../components/redux_test.js'
 import ReduxTestActions from './../actions/redux_test.js'
 
 const mapStateToProps = (state) => {
