@@ -25,7 +25,7 @@ const columnData = [
 
 class CurrencyTableHead extends React.Component {
     createSortHandler = property => event => {
-        this.props.onRequestSort(event, property);
+        this.props.onRequestSort(event, property, this.props.order, this.props.orderBy);
     };
 
     render() {
@@ -85,31 +85,9 @@ const styles = theme => ({
 });
 
 class CurrencyTable extends React.Component {
-    constructor(props) {
-        super(props);
-
-        // TODO actionsに寄せる
-        this.state = {
-            order: 'asc',
-            orderBy: '',
-            //selected: [],
-        };
-    }
-
-    handleRequestSort = (event, property) => {
-        const orderBy = property;
-        let order = 'desc';
-
-        if (this.state.orderBy === property && this.state.order === 'desc') {
-            order = 'asc';
-        }
-
-        this.setState({ order, orderBy });
-    };
 
     render() {
-        const { classes, list, display } = this.props;
-        const { order, orderBy } = this.state;
+        const { classes, list, display, handleRequestSort, order, orderBy } = this.props;
 
         return (
             <Paper className={classes.root}>
@@ -118,7 +96,7 @@ class CurrencyTable extends React.Component {
                         <CurrencyTableHead
                             order={order}
                             orderBy={orderBy}
-                            onRequestSort={this.handleRequestSort}
+                            onRequestSort={handleRequestSort}
                         />
                         <TableBody>
                             {list

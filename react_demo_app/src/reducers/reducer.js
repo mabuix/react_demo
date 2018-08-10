@@ -3,7 +3,9 @@ import Constants from '../constants';
 
 const initialState = {
     display: Constants.DISPLAY_JPY,
-    list: []
+    list: [],
+    order: 'asc',
+    orderBy: '',
 }
 
 function reducer(state = initialState, action) {
@@ -17,7 +19,8 @@ function reducer(state = initialState, action) {
         case ActionType.SORT_CONDITION: {
             return {
                 ...state,
-                list: action.list,
+                order: action.order,
+                orderBy: action.orderBy,
             }
         }
         case ActionType.CHANGE_DISPLAY: {

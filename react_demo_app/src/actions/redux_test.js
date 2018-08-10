@@ -9,49 +9,7 @@ function returnCoins(list) {
     }
 }
 
-function sortCondition(list, condition) {
-    // 同じオブジェクトをreducerに渡してもstateが更新されず、レンダリングが走らないので、参照渡しで更新用のオブジェクト生成
-    const newList = list.slice();
-    // ソート
-    newList.sort((a, b) => {
-        return a[condition] < b[condition] ? -1 : 1;
-    });
-    return {
-        type: ActionType.SORT_CONDITION,
-        list: newList,
-    }
-}
-
 const Actions = {
-
-    sortName() {
-        const list = this.list;
-        // redux-thunkを使用しているので、関数を返却しないとエラーになる
-        return function (dispatch) {
-            dispatch(sortCondition(list, 'name'));
-        }
-    },
-
-    sortPrice() {
-        const list = this.list;
-        return function (dispatch) {
-            dispatch(sortCondition(list, 'price'));
-        }
-    },
-
-    sortMarketCap() {
-        const list = this.list;
-        return function (dispatch) {
-            dispatch(sortCondition(list, 'market_cap'));
-        }
-    },
-
-    sortPercentChange24h() {
-        const list = this.list;
-        return function (dispatch) {
-            dispatch(sortCondition(list, 'percent_change_24h'));
-        }
-    },
 
     changeDisplay(display) {
         // stateのdisplayをUSD ⇔ JPYに変換して、ヘッダー、金額の表示も更新
@@ -104,6 +62,21 @@ const Actions = {
                     dispatch(returnCoins(list));
                 }, 100)
             })
+        }
+    },
+
+    handleRequestSort (event, property, order, orderBy) {
+        const changedOrderBy = property;
+        let changedOrder = 'desc';
+
+        if (orderBy === property && order === 'desc') {
+            changedOrder = 'asc';
+        }
+
+        return {
+            type: ActionType.SORT_CONDITION,
+            order: changedOrder,
+            orderBy: changedOrderBy,
         }
     },
 }
